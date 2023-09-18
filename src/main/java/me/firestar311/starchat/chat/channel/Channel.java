@@ -8,14 +8,24 @@ import org.bukkit.entity.Player;
 // The main idea behind a channel is for persistent spaces that are defined by the server
 public class Channel extends ChatSpace {
     protected String permission;
+    protected boolean autoJoin;
 
     public Channel(int id, String displayName, String format, String permission) {
         super(id, displayName, format);
         this.permission = permission;
     }
+    
+    public Channel(int id, String displayName, String format, String permission, boolean autoJoin) {
+        this(id, displayName, format, permission);
+        this.autoJoin = autoJoin;
+    }
 
     public String getPermission() {
         return permission;
+    }
+
+    public boolean isAutoJoin() {
+        return autoJoin;
     }
 
     @Override
