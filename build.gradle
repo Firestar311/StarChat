@@ -1,0 +1,74 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven {
+        allowInsecureProtocol = true
+        name "reposilite"
+        url "http://localhost:8080/snapshots"
+    }
+}
+
+dependencies {
+    compileOnly 'me.firestar311.starlib:starlib-api:1.0-SNAPSHOT'
+    compileOnly "me.firestar311.starlib:starlib-spigot:1.0-SNAPSHOT"
+    compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+}
+
+group 'me.firestar311.starchat'
+version '1.0-SNAPSHOT'
+
+publishing {
+    repositories {
+        maven {
+            allowInsecureProtocol = true
+            name = "reposilite"
+            url "http://localhost:8080/snapshots"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = "starchat"
+            version = version
+            from components.java
+        }
+    }
+}
+
+def uberJar = tasks.register('uberJar', Jar) {
+    archiveBaseName = 'StarChat'
+
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+jar.configure {
+    finalizedBy(uberJar)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
