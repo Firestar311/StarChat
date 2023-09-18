@@ -1,0 +1,5 @@
+name: ${name}
+version: ${version}
+main: me.firestar311.starchat.StarChat
+api-version: 1.20
+author: Firestar311

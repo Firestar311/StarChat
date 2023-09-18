@@ -30,6 +30,12 @@ dependencies {
 group 'me.firestar311.starchat'
 version '1.0-SNAPSHOT'
 
+processResources {
+    filesMatching("*.yml") {
+        expand(project.properties)
+    }
+}
+
 publishing {
     repositories {
         maven {
