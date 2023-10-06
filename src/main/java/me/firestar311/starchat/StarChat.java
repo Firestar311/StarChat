@@ -4,28 +4,12 @@ import me.firestar311.starchat.hooks.PAPIHook;
 import me.firestar311.starchat.hooks.VaultHook;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-
 public class StarChat extends JavaPlugin {
     
     private PAPIHook papiHook;
     private VaultHook vaultHook;
     
-    private File channelsFolder, chatroomsFolder;
-    
     public void onEnable() {
-        getConfig().addDefault("enable-channels", true);
-        getConfig().addDefault("enable-chatrooms", true);
-        getConfig().addDefault("log-global", true);
-        getConfig().addDefault("log-channels", true);
-        getConfig().addDefault("log-chatrooms", true);
-        getConfig().addDefault("use-color-permissions", true);
-        getConfig().addDefault("console.name", "Console");
-        getConfig().addDefault("console.displayname", "&4Console");
-        getConfig().addDefault("global.format", "&f<{displayname}> {message}");
-        getConfig().addDefault("global.usechannel", false);
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         
@@ -44,33 +28,6 @@ public class StarChat extends JavaPlugin {
             this.vaultHook = new VaultHook(this);
             getLogger().info("Hooked into Vault.");
         }
-        
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-        
-        this.channelsFolder = new File(getDataFolder(), "channels");
-        this.chatroomsFolder = new File(getDataFolder(), "chatrooms");
-        
-        if (!this.channelsFolder.exists()) {
-            try {
-                this.channelsFolder.createNewFile();
-            } catch (IOException e) {
-                getLogger().log(Level.SEVERE, "Could not create the channels folder.", e);
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
-        
-        if (!this.chatroomsFolder.exists()) {
-            try {
-                this.chatroomsFolder.createNewFile();
-            } catch (IOException e) {
-                getLogger().log(Level.SEVERE, "Could not create the chatrooms folder.", e);
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-        }
-        
-        
     }
 
     public PAPIHook getPapiHook() {
